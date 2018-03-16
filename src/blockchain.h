@@ -44,7 +44,7 @@ int bcLen( const BlockChain chain );
 /*
  *  Return true iff blkIsValid(block) for every block in the chain
  */
-bool blkIsValid(const BlockChain chain);
+bool bcIsValid(const BlockChain chain);
 
 
 /*
