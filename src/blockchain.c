@@ -33,7 +33,7 @@ void blkPrint(Block_t blk);
 void blkPrint(Block_t blk) {
     printf("----------------- \n");
     printf("|\tBlock: # %d\t|\n", blk.id);
-    printf("|\tNonce: %d  \t|\n", blk.proof_of_work.nonce);
+    printf("|\tNonce: %lu  \t|\n", blk.proof_of_work.i_nonce);
     tlistPrint(blk.transactions);
     printf("|\tPrev:  %s  \t|\n", blkPrevHash(blk));
     printf("|\tPrev:  %s  \t|\n", blk.hash);
@@ -112,13 +112,11 @@ bool bcIsEmpty(BlockChain chain) {
 }
 
 void bcAppend(BlockChain *chain, Block_t* new_block) {
+    assert(blkValidates(*new_block, bcTail(*chain)->hash, new_block->proof_of_work));
     if(bcIsEmpty(*chain)) {
         chain->head->next = chain->tail = new_block;
     }
     else {
-        /*new_block->next = chain->tail->next;
-        chain->tail->next = new_block;
-        chain->tail = new_block;*/
         blkChainTo(chain->tail, new_block);
     }
     assert(bcTail(*chain) == new_block && blkIsValid(*new_block));

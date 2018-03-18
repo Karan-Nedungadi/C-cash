@@ -54,7 +54,7 @@ Block_t* bcTail(const BlockChain chain);
 
 /*
  * Append the given block to the chain 
- *    iff blkValidates(new_block, bcTail->hash, new_block->proof_of_work)
+ * iff blkValidates(new_block, bcTail->hash, new_block->proof_of_work)
  * POST: bcTail(*chain) == new_block && blkIsValid(*new_block)
  */
 void bcAppend( BlockChain *chain, Block_t* new_block );

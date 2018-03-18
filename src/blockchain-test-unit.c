@@ -18,6 +18,8 @@
 #include "block.h"
 #include "blockchain.h"
 
+const int SET_DIFFICULTY = 2;    // Default difficulty for hashing puzzles, increase to make mining harder
+
 
 /*
  * Run a single test case
@@ -51,7 +53,7 @@ void main()
         tlistAppend(&tl1, "Joe", (i+3)*2+99.0/(i+1), "Tim");
     }
     
-    Block_t* block1 = blkCreate(tl, DEFAULT_DIFFICULTY, NULL_NONCE);
+    Block_t* block1 = blkCreate(tl1, SET_DIFFICULTY, NULL_NONCE);
     
     //Test 1: Constructor
     BlockChain chain = bcNew();
@@ -63,4 +65,10 @@ void main()
     for(i=0; i<10; i++) {
         bcAppend(&chain, block1);
     }
+    
+    //Test3: Validate
+    printf("3");
+    bool valid = bcIsValid(chain);
+    failed_test_counter += run_test(valid, true, "Blockchain does not validate with mined PoW");
+    printf(".");
 }
