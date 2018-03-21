@@ -54,9 +54,9 @@ Puzzle_t blkCreatePuzzle(const Block_t block, const Hash_t prev_hash) {
 bool blkValidates(const Block_t block, const Hash_t prev_hash, Nonce_t proof_of_work) {
    // Use the Puzzle logic to check the proof_of_work - DRY
    Puzzle_t puzzle = blkCreatePuzzle(block, prev_hash);
-   bool sovled = puzzleIsSovedBy(puzzle, proof_of_work);
+   bool solved = puzzleIsSovedBy(puzzle, proof_of_work);
    puzzleDelete(&puzzle);
-   return sovled;
+   return solved;
 }
 
 bool blkIsValid(const Block_t block) {

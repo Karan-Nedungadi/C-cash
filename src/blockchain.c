@@ -36,14 +36,13 @@ void blkPrint(Block_t blk) {
     printf("|\tNonce: %lu  \t|\n", blk.proof_of_work.i_nonce);
     tlistPrint(blk.transactions);
     printf("|\tPrev:  %s  \t|\n", blkPrevHash(blk));
-    printf("|\tPrev:  %s  \t|\n", blk.hash);
+    printf("|\tHash:  %s  \t|\n", blk.hash);
     printf("----------------- \n");
-    printf("-->");
 }
 
 BlockChain bcNew() {
-    Block_t* new = blkCreate(tlistCreate(), DEFAULT_DIFFICULTY, NULL_NONCE);
-    BlockChain bc = {new, new};
+    Block_t* genesis = blkCreate(tlistCreate(), DEFAULT_DIFFICULTY, NULL_NONCE);
+    BlockChain bc = {genesis, genesis};
 }
 
 void bcDelete(BlockChain *chain) {
@@ -61,6 +60,7 @@ void bcPop(BlockChain* chain) {
     assert(!bcIsEmpty(*chain));
     Block_t* blk = chain->head->next;
     chain->head->next = blk->next;
+    blk->next->prev = chain->head;
     if(chain->tail == blk) {
         chain->tail = chain->head;
     }
@@ -115,9 +115,10 @@ void bcAppend(BlockChain *chain, Block_t* new_block) {
     assert(blkValidates(*new_block, bcTail(*chain)->hash, new_block->proof_of_work));
     if(bcIsEmpty(*chain)) {
         chain->head->next = chain->tail = new_block;
+        new_block->prev = chain->head;
     }
     else {
-        blkChainTo(chain->tail, new_block);
+        blkChainTo(bcTail(*chain), new_block);
     }
     assert(bcTail(*chain) == new_block && blkIsValid(*new_block));
 }

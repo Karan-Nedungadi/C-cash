@@ -37,7 +37,6 @@ int run_test(int result, int expected, char* msg)
 }
 
 
-
 /*
  * Run a series of test cases.
  * Report on failed tests
@@ -48,27 +47,37 @@ void main()
     int failed_test_counter = 0;
     printf("Unit Test Suite for BlockChan ADT operations...\n");
     
-    TransactionList tl1 = tlistCreate();
+    TransactionList t1 = tlistCreate();
     for(i=0; i<5; i++) {
-        tlistAppend(&tl1, "Joe", (i+3)*2+99.0/(i+1), "Tim");
+        tlistAppend(&t1, "Joseph", i+50, "Tim");
     }
     
-    Block_t* block1 = blkCreate(tl1, SET_DIFFICULTY, NULL_NONCE);
+    Block_t* block1 = blkCreate(t1, SET_DIFFICULTY, NULL_NONCE);
+    blkPrint(*block1);
     
     //Test 1: Constructor
     BlockChain chain = bcNew();
+    bcPrint(chain);
     printf("1");
     failed_test_counter += run_test(bcLen(chain), 0, "Constructor fails to create empty blockchain.");
     printf(".");
     
     //Test2: Append blocks
-    for(i=0; i<10; i++) {
-        bcAppend(&chain, block1);
-    }
+    bcAppend(&chain, block1);
     
     //Test3: Validate
     printf("3");
     bool valid = bcIsValid(chain);
     failed_test_counter += run_test(valid, true, "Blockchain does not validate with mined PoW");
     printf(".");
+    
+    
+    //Test 1243223: Deustructor (white-box tests)
+    printf("1223445");
+    bcDelete(&chain);
+    printf(".");
+    
+    printf("\n\nUnit Test Complete: ");
+    if(failed_test_counter == 0) printf("ALL TESTS PASSED\n");
+    else printf("FAILED %d TESTS\n", failed_test_counter);
 }

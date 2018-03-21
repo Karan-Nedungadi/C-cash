@@ -49,7 +49,7 @@ void trnsPrint(const TransactionRecord r) {
    const char* fmt = "%x (%X)";
    char formatted_datetime[80];
    strftime(formatted_datetime, 80, fmt, localtime( &r.timestamp ));
-   printf("   <%s --> %.4f --> %s> %s \n", r.debtor, r.amount, r.creditor, formatted_datetime);
+   printf("<%s --> %.4f --> %s> %s \n", r.debtor, r.amount, r.creditor, formatted_datetime);
    
    // CODE FOR READING A FORMATTED DATE/TIME back into a timestamp
    struct tm timestruct;
