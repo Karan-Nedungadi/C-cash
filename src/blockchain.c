@@ -66,7 +66,7 @@ void bcPop(BlockChain* chain) {
     assert(!bcIsEmpty(*chain));
     Block_t* blk = chain->head->next;
     chain->head->next = blk->next;
-    blk->next->prev = chain->head;
+    //blk->next->prev = chain->head;
     if(chain->tail == blk) {
         chain->tail = chain->head;
     }
@@ -98,12 +98,12 @@ bool bcIsValid(const BlockChain chain) {
     Block_t* cur = chain.head->next;
     while(cur != NULL) {
         if(!blkIsValid(*cur)) {
-            printf("3");
+            printf("34");
             return false;
         }
-        printf("3");
         cur = cur->next;
     }
+    assert(cur == bcTail(chain)->next);
     return true;
 }
 
@@ -119,31 +119,15 @@ bool bcIsEmpty(BlockChain chain) {
 }
 
 void bcAppend(BlockChain *chain, Block_t* new_block) {
-    //bug Testing
-    // printf("\n New block: \n");
-    // blkPrint(*new_block);
-    // printf("\n Tail Hash: \n");
-    // printHash(bcTail(*chain)->hash);
-    // printf("\tNew block Nonce: %lu\n", new_block->proof_of_work.i_nonce);
     assert(blkValidates(*new_block, bcTail(*chain)->hash, new_block->proof_of_work));
     if(bcIsEmpty(*chain)) {
         chain->head->next = chain->tail = new_block;
         new_block->prev = chain->head;
         blkComputeHash(new_block);
-        //blkPrint(*bcTail(*chain));
     }
     else {
         blkChainTo(bcTail(*chain), new_block);
         chain->tail = new_block;
-        //blkPrint(*bcTail(*chain));
     }
-    //bug Testing
-    // printf("\n Tail block: \n");
-    // blkPrint(*bcTail(*chain));
-    // printf("\n New block: \n");
-    // blkPrint(*new_block);
-    // if(blkIsValid(*new_block)) {
-    //     printf("\n Valid \n");
-    // }
     assert(bcTail(*chain) == new_block && blkIsValid(*new_block));
 }

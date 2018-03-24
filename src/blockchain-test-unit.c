@@ -60,56 +60,38 @@ void main()
     }
     
     Block_t* block1 = blkCreate(t1, SET_DIFFICULTY, NULL_NONCE);
-    // char buf[tlistSerialLen(t1) + 1];
-    // buf[0] = '\0';
-    // tlistSerialize(block1->id, t1, buf);
-    
-    // printHash(chain.tail->hash);
-    // printf("%p \n", chain.tail);
     Puzzle_t puzzle = blkCreatePuzzle(*block1, bcTail(chain)->hash);
     block1->proof_of_work = puzzleMine(puzzle);
-    //blkPrint(block1);
     
     
     //Test2: Append blocks
     bcAppend(&chain, block1);
-    printf("\n\n\n\n");
-    bcPrint(chain);
+    printf("3");
+    failed_test_counter != run_test(bcLen(chain), 1, "Failed to append block.");
     
-    // TransactionList t2 = tlistCreate();
-    // for(i=0; i<3; i++) {
-    //     tlistAppend(&t2, "rob", i*32 +14, "Dave");
-    // }
+    TransactionList t2 = tlistCreate();
+    for(i=0; i<5; i++) {
+        tlistAppend(&t2, "arab", i+50, "oil");
+    }
     
-    Block_t* block2 = blkCreate(t1, SET_DIFFICULTY, NULL_NONCE);
-    // char buf2[tlistSerialLen(t1) + 1];
-    // buf2[0] = '\0';
-    // tlistSerialize(block2->id, t1, buf2);
+    Block_t* block2 = blkCreate(t2, SET_DIFFICULTY, NULL_NONCE);
     Puzzle_t puzzle2 = blkCreatePuzzle(*block2, bcTail(chain)->hash);
     block2->proof_of_work = puzzleMine(puzzle2);
     
-    // Block_t* block3 = blkCreate(t2, SET_DIFFICULTY, NULL_NONCE);
-    // // char buf3[tlistSerialLen(t2) + 1];
-    // // buf3[0] = '\0';
-    // tlistSerialize(block3->id, t2, buf2);
-    // Puzzle_t puzzle3 = puzzleCreate(buf2, chain.tail->hash, SET_DIFFICULTY);
-    // block3->proof_of_work = puzzleMine(puzzle3);
-    
     bcAppend(&chain, block2);
-    // bcAppend(&chain, block3);
-    printf("\n\n\n\n");
-    bcPrint(chain);
+    printf("4");
+    failed_test_counter != run_test(bcLen(chain), 2, "Failed to append second block.");
     
     
-    //Test3: Validate
-    printf("3\n");
+    //Test5: Validate
+    printf("5");
     bool valid = bcIsValid(chain);
-    failed_test_counter += run_test(bcIsValid(chain), true, "Blockchain does not validate with mined PoW");
+    failed_test_counter += run_test(valid, true, "Blockchain does not validate with mined PoW");
     printf(".");
     
     
-    //Test 1243223: Deustructor (white-box tests)
-    printf("4");
+    //Test 5: Deustructor (white-box tests)
+    printf("6");
     bcDelete(&chain);
     printf(".");
     
