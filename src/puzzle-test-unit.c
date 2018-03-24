@@ -73,7 +73,7 @@ void main()
    
    // Test 4: isSolvedBy
    printf("4");
-   failed_test_counter += run_test(puzzleIsSovedBy(puzzle, pow), true, "Mined proof-of-work does not solve puzzle.");
+   failed_test_counter += run_test(puzzleIsSolvedBy(puzzle, pow), true, "Mined proof-of-work does not solve puzzle.");
    printf(".");
 
    // Test 5: Destructor (white-box tests)

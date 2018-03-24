@@ -82,7 +82,7 @@ void puzzleHash(const Puzzle_t puzzle, const Nonce_t proof_of_work, Hash_t hash)
 /*
  * Return true iff the puzzle is solved by the given proof_of_work
  */
-bool puzzleIsSovedBy(const Puzzle_t puzzle, const Nonce_t proof_of_work);
+bool puzzleIsSolvedBy(const Puzzle_t puzzle, const Nonce_t proof_of_work);
 
 
 /*********************

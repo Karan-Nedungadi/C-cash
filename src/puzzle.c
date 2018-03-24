@@ -90,7 +90,7 @@ void puzzleHash(const Puzzle_t puzzle, const Nonce_t proof_of_work, Hash_t hash)
 /*
  * Return true iff the puzzle is solved by the given proof_of_work
  */
-bool puzzleIsSovedBy(const Puzzle_t puzzle, const Nonce_t proof_of_work) {
+bool puzzleIsSolvedBy(const Puzzle_t puzzle, const Nonce_t proof_of_work) {
    Hash_t hash;
    puzzleHash(puzzle, proof_of_work, hash);
    // Puzzle is solved by the given proof-of-work if its hash starts with enough leading zeros.
@@ -114,7 +114,7 @@ bool puzzleIsSovedBy(const Puzzle_t puzzle, const Nonce_t proof_of_work) {
 Nonce_t puzzleMine(const Puzzle_t puzzle) {
     Nonce_t proof_of_work = {0};
     
-   while (!puzzleIsSovedBy(puzzle, proof_of_work)) {
+   while (!puzzleIsSolvedBy(puzzle, proof_of_work)) {
       if (proof_of_work.i_nonce == NONCE_MAX)   // avoid overflow / infinite loop if puzzle is too hard
          return NULL_NONCE;                     // got to return something, although this won't be a valid proof-of-work
       proof_of_work.i_nonce += 1;

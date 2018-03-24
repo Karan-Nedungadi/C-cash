@@ -3,7 +3,8 @@
  *
  *  COMP220: Assignment 3
  *  Author:  Karan Nedunagdi
- *  Date:    Feb. 1, 2018
+ *  Help: Robert Bell, Benjamin Hynes
+ *  Date: (start) Feb. 1, 2018 , (end) Mar. 24, 2018
  */
 
 #include <stdio.h>
@@ -31,18 +32,23 @@ void blkPrint(Block_t blk);
  * prints a block on STDOUT
  */
 void blkPrint(Block_t blk) {
-    printf("----------------- \n");
-    printf("|\tBlock: # %d\t|\n", blk.id);
-    printf("|\tNonce: %lu  \t|\n", blk.proof_of_work.i_nonce);
+    //printf("------------------- \n");
+    printf("\tBlock: # %d\n", blk.id);
+    printf("\tNonce: %lu\n", blk.proof_of_work.i_nonce);
     tlistPrint(blk.transactions);
-    printf("|\tPrev:  %s  \t|\n", blkPrevHash(blk));
-    printf("|\tHash:  %s  \t|\n", blk.hash);
-    printf("----------------- \n");
+    if(blk.prev != NULL){
+        printf("prev");
+        printHash(blk.prev->hash);
+    }
+    printHash(blk.hash);
+    printf("---------------------------------> \n");
 }
 
 BlockChain bcNew() {
     Block_t* genesis = blkCreate(tlistCreate(), DEFAULT_DIFFICULTY, NULL_NONCE);
     BlockChain bc = {genesis, genesis};
+    blkComputeHash(genesis);
+    return bc;
 }
 
 void bcDelete(BlockChain *chain) {
@@ -68,7 +74,7 @@ void bcPop(BlockChain* chain) {
 }
 
 void bcPrint(const BlockChain chain) {
-    Block_t*cur = chain.head->next;
+    Block_t*cur = chain.head;
     printf("\n BlockChain:\n");
     while(cur != NULL) {
         blkPrint(*cur);
@@ -91,11 +97,12 @@ int bcLen(const BlockChain chain) {
 bool bcIsValid(const BlockChain chain) {
     Block_t* cur = chain.head->next;
     while(cur != NULL) {
-        if(blkIsValid(*cur))
-            cur = cur->next;
-            else {
-                return false;
-            }
+        if(!blkIsValid(*cur)) {
+            printf("3");
+            return false;
+        }
+        printf("3");
+        cur = cur->next;
     }
     return true;
 }
@@ -112,13 +119,31 @@ bool bcIsEmpty(BlockChain chain) {
 }
 
 void bcAppend(BlockChain *chain, Block_t* new_block) {
+    //bug Testing
+    // printf("\n New block: \n");
+    // blkPrint(*new_block);
+    // printf("\n Tail Hash: \n");
+    // printHash(bcTail(*chain)->hash);
+    // printf("\tNew block Nonce: %lu\n", new_block->proof_of_work.i_nonce);
     assert(blkValidates(*new_block, bcTail(*chain)->hash, new_block->proof_of_work));
     if(bcIsEmpty(*chain)) {
         chain->head->next = chain->tail = new_block;
         new_block->prev = chain->head;
+        blkComputeHash(new_block);
+        //blkPrint(*bcTail(*chain));
     }
     else {
         blkChainTo(bcTail(*chain), new_block);
+        chain->tail = new_block;
+        //blkPrint(*bcTail(*chain));
     }
+    //bug Testing
+    // printf("\n Tail block: \n");
+    // blkPrint(*bcTail(*chain));
+    // printf("\n New block: \n");
+    // blkPrint(*new_block);
+    // if(blkIsValid(*new_block)) {
+    //     printf("\n Valid \n");
+    // }
     assert(bcTail(*chain) == new_block && blkIsValid(*new_block));
 }
