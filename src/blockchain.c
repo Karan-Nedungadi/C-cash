@@ -54,7 +54,7 @@ BlockChain bcNew() {
 
 void bcDelete(BlockChain *chain) {
     assert(bcLen(*chain) > 0);
-    while(chain->head->next != NULL) {
+    while(!bcIsEmpty(*chain)) {
         bcPop(chain);
     }
 }
