@@ -3,7 +3,7 @@
  *
  *  COMP220: Assignment 3
  *  Author:  Karan Nedunagdi
- * Collaborated with: Robert Bell, Benjamin Hynes, Tim wriglesworth
+ * Collaborated with: Robert Bell, Benjamin Hynes, Tim Wriglesworth
  *  Date: (start)  Mar. 17, 2018 , (end) Mar. 24, 2018
  * 
  * Develop a test driver! 
