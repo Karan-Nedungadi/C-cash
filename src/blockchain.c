@@ -3,7 +3,7 @@
  *
  *  COMP220: Assignment 3
  *  Author:  Karan Nedunagdi
- *  Help: Robert Bell, Benjamin Hynes
+ *  Collaborated with: Robert Bell, Benjamin Hynes, Tim wriglesworth
  *  Date: (start) Feb. 1, 2018 , (end) Mar. 24, 2018
  */
 
@@ -29,6 +29,7 @@ bool bcIsEmpty(BlockChain chain);
 void blkPrint(Block_t blk);
 
 /*
+ * Helper function
  * prints a block on STDOUT
  */
 void blkPrint(Block_t blk) {
@@ -47,7 +48,7 @@ void blkPrint(Block_t blk) {
 BlockChain bcNew() {
     Block_t* genesis = blkCreate(tlistCreate(), DEFAULT_DIFFICULTY, NULL_NONCE);
     BlockChain bc = {genesis, genesis};
-    blkComputeHash(genesis);
+    blkComputeHash(genesis); //don't want the last hash of the chain to be NULL_HASH
     return bc;
 }
 
@@ -59,18 +60,15 @@ void bcDelete(BlockChain *chain) {
 }
 
 /*
+ * Helper Function
  * Delete the block at the front of the list
  * PRE: make sure list is not empty
  */
 void bcPop(BlockChain* chain) {
     assert(!bcIsEmpty(*chain));
-    Block_t* blk = chain->head->next;
-    chain->head->next = blk->next;
-    //blk->next->prev = chain->head;
-    if(chain->tail == blk) {
-        chain->tail = chain->head;
-    }
-    blkDelete(blk);
+    chain->tail = chain->tail->prev;
+    blkDelete(chain->tail->next);
+    chain->tail->next = NULL;
 }
 
 void bcPrint(const BlockChain chain) {
@@ -98,7 +96,6 @@ bool bcIsValid(const BlockChain chain) {
     Block_t* cur = chain.head->next;
     while(cur != NULL) {
         if(!blkIsValid(*cur)) {
-            printf("34");
             return false;
         }
         cur = cur->next;
@@ -112,6 +109,7 @@ Block_t* bcTail(const BlockChain chain) {
 }
 
 /*
+ * Helper function
  * Checks if the chain is empty
  */
 bool bcIsEmpty(BlockChain chain) {
@@ -119,7 +117,8 @@ bool bcIsEmpty(BlockChain chain) {
 }
 
 void bcAppend(BlockChain *chain, Block_t* new_block) {
-    assert(blkValidates(*new_block, bcTail(*chain)->hash, new_block->proof_of_work));
+    //append algorithm
+    assert(blkValidates(*new_block, chain->tail->hash, new_block->proof_of_work));
     if(bcIsEmpty(*chain)) {
         chain->head->next = chain->tail = new_block;
         new_block->prev = chain->head;
