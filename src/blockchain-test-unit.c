@@ -115,11 +115,11 @@ void main()
     
     
     //------------- WHITE-BOX TESTING -----------------
-    //Test 5: Append:  try appending a non valid block 
+    //Test 5: Append:  try appending a non valid block
     printf("5");
     TransactionList t4 = tlistCreate();
     for(i=0; i<10; i++) {
-        tlistAppend(&t4, "Tammy", 30.00, "James");
+        tlistAppend(&t4, "Logan", 30.00, "Paul");
     }
     
     TransactionList tscam = tlistCreate();

@@ -61,7 +61,7 @@ void bcDelete(BlockChain *chain) {
 
 /*
  * Helper Function
- * Delete the block at the front of the list
+ * Delete the block at the tial of the list
  * PRE: make sure list is not empty
  */
 void bcPop(BlockChain* chain) {
