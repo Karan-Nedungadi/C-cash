@@ -3,7 +3,7 @@
  *
  *  COMP220: Assignment 3
  *  Author:  Karan Nedunagdi
- *  Collaborated with: Robert Bell, Benjamin Hynes, Tim wriglesworth
+ *  Collaborated with: Robert Bell, Benjamin Hynes, Tim Wriglesworth
  *  Date: (start) Feb. 1, 2018 , (end) Mar. 24, 2018
  */
 

@@ -114,35 +114,39 @@ void main()
     printf(".");
     
     
-    //Test 5: Deustructor (white-box tests)
+    //------------- WHITE-BOX TESTING -----------------
+    //Test 5: Append:  try appending a non valid block 
     printf("5");
-    bcDelete(&chain);
-    printf(".");
+    TransactionList t4 = tlistCreate();
+    for(i=0; i<10; i++) {
+        tlistAppend(&t4, "Tammy", 30.00, "James");
+    }
     
+    TransactionList tscam = tlistCreate();
+    for (i=0; i<5; i++) {
+        tlistAppend(&tscam, "Scam", 30.00, "Scam");
+    }
     
-   //Test 6: Append:  try appending a non valid block 
-   printf("6");
-   TransactionList t5 = tlistCreate();
-   for(i=0; i<10; i++) {
-       tlistAppend(&t5, "Tammy", 30.00, "James");
-   }
-   
-   TransactionList tscam = tlistCreate();
-   for (i=0; i<5; i++) {
-       tlistAppend(&tscam, "Scam", 30.00, "Scam");
-   }
-   
-   Block_t* newBlk5 = blkCreate(t5 , SET_DIFFICULTY, NULL_NONCE);
-   Block_t* FalsifiedBlk = blkCreate(tscam , SET_DIFFICULTY, NULL_NONCE);
-   
-   Puzzle_t newPuzzle5 = blkCreatePuzzle(*newBlk5, chain.tail->hash);
-   Puzzle_t WrongPuzzle = blkCreatePuzzle(*FalsifiedBlk, chain.tail->hash);
-   
-   FalsifiedBlk->proof_of_work = puzzleMine(newPuzzle5);   // give the wrong proof of work (ie blk is not valid)
+    Block_t* block4 = blkCreate(t4 , SET_DIFFICULTY, NULL_NONCE);
+    Block_t* FalsifiedBlk = blkCreate(tscam , SET_DIFFICULTY, NULL_NONCE);
+    
+    Puzzle_t newPuzzle5 = blkCreatePuzzle(*block4, chain.tail->hash);
+    Puzzle_t WrongPuzzle = blkCreatePuzzle(*FalsifiedBlk, chain.tail->hash);
+    
+    FalsifiedBlk->proof_of_work = puzzleMine(newPuzzle5);   // give the wrong proof of work (ie blk is not valid)
    
    bool blkvalid = blkValidates(*FalsifiedBlk, chain.tail->hash, FalsifiedBlk->proof_of_work);
    failed_test_counter += run_test(blkvalid, false, "Blockchain validates invalid block.");
    printf(".");
+   
+   //Test 6: Deustructor
+    printf("6");
+    bcDelete(&chain);
+    printf(".");
+   
+   for(i=0; i<10; i++) {
+       printf(".");
+   }
    
    printf("\n\nUnit Test Complete: ");
    if(failed_test_counter == 0) printf("ALL TESTS PASSED\n");
